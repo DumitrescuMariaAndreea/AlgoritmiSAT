@@ -1,18 +1,14 @@
 def find_unit_clause(clauses):
-    """
-    Găsește clauza unitate din mulțimea de clauze (dacă există).
-    Returnează literalul din clauza unitate sau None dacă nu există.
-    """
+    # Găsește clauza unitate din mulțimea de clauze (dacă există).
+    # Returnează literalul din clauza unitate sau None dacă nu există.
     for clause in clauses:
         if len(clause) == 1:
             return clause[0]
     return None
 
 def find_pure_literal(clauses):
-    """
-    Găsește un literal pur în mulțimea de clauze (dacă există).
-    Un literal este pur dacă apare cu o singură polaritate în toate clauzele.
-    """
+    # Găsește un literal pur în mulțimea de clauze (dacă există).
+    # Un literal este pur dacă apare cu o singură polaritate în toate clauzele.
     all_literals = []
     for clause in clauses:
         all_literals.extend(clause)
@@ -31,20 +27,18 @@ def find_pure_literal(clauses):
     return None
 
 def simplify_clauses(clauses, literal):
-    """
-    Simplifică mulțimea de clauze eliminând clauzele satisfăcute de literal
-    și eliminând -literal din celelalte clauze.
-    """
+    # Simplifică mulțimea de clauze eliminând clauzele satisfăcute de literal, eliminând -literal din celelalte clauze.
     new_clauses = []
     for clause in clauses:
         # Dacă literal este în clauză, clauza devine adevărată și o eliminăm
         if literal in clause:
             continue
         
-        # Dacă negația literalului este în clauză, o eliminăm din clauză
+        # Dacă negația literalului este în clauză, il eliminăm 
         if -literal in clause:
             new_clause = [lit for lit in clause if lit != -literal]
-            if not new_clause:  # Dacă clauza devine vidă, formula nu este satisfiabilă
+            if not new_clause:  
+                # Dacă clauza devine vidă, formula nu este satisfiabilă
                 return None
             new_clauses.append(new_clause)
         else:
@@ -53,11 +47,9 @@ def simplify_clauses(clauses, literal):
     return new_clauses
 
 def choose_variable(clauses):
-    """
-    Alege o variabilă pentru divizare.
-    Strategie simplă: ia prima variabilă din prima clauză.
-    În implementările avansate, aici s-ar putea folosi euristici precum VSIDS, JW, etc.
-    """
+    # Alege o variabilă pentru divizare.
+    # Strategie simplă: ia prima variabilă din prima clauză.
+    # În implementările avansate, aici s-ar putea folosi euristici precum VSIDS, JW, etc.
     all_vars = set()
     for clause in clauses:
         for lit in clause:
@@ -68,10 +60,8 @@ def choose_variable(clauses):
     return None
 
 def dpll(clauses, assignment=None):
-    """
-    Algoritmul DPLL pentru verificarea satisfiabilității.
-    Returnează un model (asignare de valori) dacă formula este satisfiabilă, None în caz contrar.
-    """
+    # Algoritmul DPLL pentru verificarea satisfiabilității.
+    # Returnează un model (asignare de valori) dacă formula este satisfiabilă, None în caz contrar.
     if assignment is None:
         assignment = {}
     
@@ -83,7 +73,7 @@ def dpll(clauses, assignment=None):
     if [] in clauses:
         return None
     
-    # Aplică regula clauzei unitate
+    # Aplică regula clauzei unitate -> ajută la reducerea complexității căutării prin deducerea valorilor variabilelor din clauze unitare
     unit_literal = find_unit_clause(clauses)
     if unit_literal:
         var = abs(unit_literal)
@@ -94,7 +84,7 @@ def dpll(clauses, assignment=None):
             return None
         return dpll(new_clauses, assignment)
     
-    # Aplică regula literalului pur
+    # Aplică regula literalului pur -> un mecanism de simplificare a formulelor logice, care ajută la reducerea căutării 
     pure_literal = find_pure_literal(clauses)
     if pure_literal:
         var = abs(pure_literal)
@@ -132,26 +122,22 @@ def dpll(clauses, assignment=None):
     return None
 
 def solve_dpll(cnf_formula):
-    """
-    Rezolvă problema SAT folosind algoritmul DPLL.
+    # Rezolvă problema SAT folosind algoritmul DPLL.
     
-    Args:
-        cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
-                    unde fiecare clauză este o listă de literali (numere întregi).
-                    Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
+    # Args:
+    #     cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
+    #                 unde fiecare clauză este o listă de literali (numere întregi).
+    #                 Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
     
-    Returns:
-        Un dicționar cu asignarea variabilelor dacă formula este satisfiabilă, None altfel.
-    """
+    # Returns:
+    #     Un dicționar cu asignarea variabilelor dacă formula este satisfiabilă, None altfel.
     return dpll(cnf_formula)
 
 def is_satisfiable_dpll(cnf_formula):
-    """
-    Verifică dacă o formulă CNF este satisfiabilă folosind DPLL.
+    # Verifică dacă o formulă CNF este satisfiabilă folosind DPLL.
     
-    Returns:
-        True dacă formula este satisfiabilă, False altfel.
-    """
+    # Returns:
+    #     True dacă formula este satisfiabilă, False altfel.
     result = solve_dpll(cnf_formula)
     return result is not None
 
