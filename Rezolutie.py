@@ -1,10 +1,6 @@
 def resolution_step(clauses):
-    """
-    Execută un pas de rezoluție, încercând să rezolve toate perechile de clauze posibile.
-    Returnează noile clauze generate în acest pas.
-    """
+    # Execută un pas de rezoluție, încercând să rezolve toate perechile de clauze posibile, returnează noile clauze generate în acest pas.
     new_clauses = []
-    
     # Pentru fiecare pereche de clauze
     for i in range(len(clauses)):
         for j in range(i + 1, len(clauses)):
@@ -30,17 +26,15 @@ def resolution_step(clauses):
     return new_clauses
 
 def resolution(cnf_formula):
-    """
-    Aplică algoritmul Rezoluției pentru a verifica satisfiabilitatea formulei.
+    # Aplică algoritmul Rezoluției pentru a verifica satisfiabilitatea formulei.
     
-    Args:
-        cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
-                    unde fiecare clauză este o listă de literali (numere întregi).
-                    Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
+    # Args:
+    #     cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
+    #                 unde fiecare clauză este o listă de literali (numere întregi).
+    #                 Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
     
-    Returns:
-        True dacă formula este satisfiabilă, False dacă nesatisfiabilă.
-    """
+    # Returns:
+    #     True dacă formula este satisfiabilă, False dacă nesatisfiabilă.
     # Inițializăm mulțimea de clauze cu formula inițială
     clauses = [sorted(list(set(clause))) for clause in cnf_formula]
     
@@ -65,27 +59,27 @@ def resolution(cnf_formula):
                 clauses.append(clause)
 
 def solve_resolution(cnf_formula):
-    """
-    Rezolvă problema SAT folosind algoritmul Rezoluției.
     
-    Args:
-        cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
-                    unde fiecare clauză este o listă de literali (numere întregi).
-                    Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
+    # Rezolvă problema SAT folosind algoritmul Rezoluției.
     
-    Returns:
-        True dacă formula este satisfiabilă, False dacă nesatisfiabilă.
-    """
+    # Args:
+    #     cnf_formula: O formulă în forma normală conjunctivă reprezentată ca o listă de clauze,
+    #                 unde fiecare clauză este o listă de literali (numere întregi).
+    #                 Un literal pozitiv x este reprezentat ca x, iar negația sa ca -x.
+    
+    # Returns:
+        # True dacă formula este satisfiabilă, False dacă nesatisfiabilă.
+    
     return resolution(cnf_formula)
 
 # Funcție auxiliară pentru a converti o formulă la forma normală negată (pentru rezoluție)
 def negate_formula(cnf_formula):
-    """
-    Negează o formulă CNF pentru a o putea folosi în algoritmul rezoluției.
     
-    Pentru a nega (A ∧ B ∧ C), obținem (¬A ∨ ¬B ∨ ¬C), unde A, B, C sunt clauze.
-    În practică, aceasta înseamnă că vom aplica negarea fiecărei clauze și vom crea o clauză nouă pentru fiecare literal.
-    """
+    # Negează o formulă CNF pentru a o putea folosi în algoritmul rezoluției.
+    
+    # Pentru a nega (A ∧ B ∧ C), obținem (¬A ∨ ¬B ∨ ¬C), unde A, B, C sunt clauze.
+    # În practică, aceasta înseamnă că vom aplica negarea fiecărei clauze și vom crea o clauză nouă pentru fiecare literal.
+    
     negated_clauses = []
     
     # Pentru fiecare clauză din formula originală
